@@ -1,0 +1,77 @@
+// Conditions of Dominat Effectiveness of Distal Sites of Active Uniform Dendrites with Distributed Tonic Inputs
+// S.M. Korogod, I.B. Kulagina
+// Neirofiziologiya/Neurophysiology, Vol.30, Nos.4/5, pp.376-382, July-October, 1998
+
+objectvar GGrapher, EGrapher, JGrapher
+
+// make graphics for Fig.1. A
+proc MakeGGrapher() {
+  GGrapher = new Grapher(1)
+  GGrapher.info("v_init","v_init", "init()", -80, 0, 0, 6, 64, -80, 0)
+  GGrapher.g.size(-85,0,0,6)
+  GGrapher.g.xexpr("v_init", 0)
+  GGrapher.g.addexpr("1000*Dendrite.gnmda_nmda( 0.01 )", 1, 1, 1, 1, 2)
+  GGrapher.g.addexpr("1000*Dendrite.g1_nmda( 0.01 )", 3, 1, 1, 1, 2)
+  GGrapher.g.label(0.5, 1, "A", 2, 1, 0, 1, 1)
+  GGrapher.g.label(0.05, 1, "mS/cm2", 2, 1, 0, 1, 1)
+  GGrapher.g.label(0.9, 0.15, "mV", 2, 1, 0, 1, 1)
+  GGrapher.g.label(0.7, 0.6, "Gm", 2, 1, 0, 1, 3)
+  GGrapher.g.label(0.8, 0.4, "Gnmda", 2, 1, 0, 1, 1)
+  GGrapher.g.yaxis(3)
+  GGrapher.g.xaxis(-80, 0)
+  GGrapher.g.yaxis(0, 6, -80, 6, 0, 0, 1)
+  GGrapher.vbox.map("Grapher", 120, 140, 250, 480)
+} // MakeGGrapher()
+
+// make graphics for Fig.1. B
+proc MakeEGrapher() {
+  EGrapher = new Grapher(1)
+  EGrapher.info("v_init","v_init", "init()", -80, 0, -70, 0, 64, -80, 0)
+  EGrapher.g.size(-85,0,-70,0)
+  EGrapher.g.xexpr("v_init", 0)
+  EGrapher.g.addexpr("Dendrite.eq_nmda( 0.01 )", 1, 1, 1, 1, 2)
+  EGrapher.g.label(0.5, 1, "B", 2, 1, 0, 1, 1)
+  EGrapher.g.label(0.05, 1, "mV", 2, 1, 0, 1, 1)
+  EGrapher.g.label(0.9, 0.15, "mV", 2, 1, 0, 1, 1)
+  EGrapher.g.label(0.5, 0.55, "Eq", 2, 1, 0, 1, 1)
+  EGrapher.g.yaxis(3)
+  EGrapher.g.xaxis(-80, 0, -70, 4, 0, 0, 1)
+  EGrapher.g.yaxis(-70, 0, -80, 7, 0, 0, 1)
+  EGrapher.vbox.map("Grapher", 470, 140, 250, 480)
+} // MakeEGrapher()
+
+// make graphics for Fig.1. C
+proc MakeJGrapher() {
+  JGrapher = new Grapher(1)
+  JGrapher.info("v_init","v_init", "init()", -80, 0, -40, 10, 64, -80, 0)
+  JGrapher.g.size(-85,0,-40,10)
+  JGrapher.g.xexpr("v_init", 0)
+  JGrapher.g.addexpr("1000*(Dendrite.g1_nmda( 0.01 )*(Dendrite.v(0.01)-Dendrite.eq_nmda(0.01)))", 1, 1, 1, 1, 2)
+  JGrapher.g.label(0.5, 1, "C", 2, 1, 0, 1, 1)
+  JGrapher.g.label(0.05, 1, "uA/cm2", 2, 1, 0, 1, 1)
+  JGrapher.g.label(0.9, 0.15, "mV", 2, 1, 0, 1, 1)
+  JGrapher.g.label(0.5, 0.55, "Jm", 2, 1, 0, 1, 1)
+  JGrapher.g.yaxis(3)
+  JGrapher.g.xaxis(-80, 0, -40, 4, 0, 0, 1)
+  JGrapher.g.xaxis(-80, 5, 0, 0, 0, 0, 0)
+  JGrapher.g.yaxis(-40, 10, -80, 5, 0, 0, 1)
+  JGrapher.vbox.map("Grapher", 820, 140, 250, 480)
+} // MakeJGrapher()
+
+proc Destroy() {
+  GGrapher.vbox.unmap()
+  EGrapher.vbox.unmap()
+  JGrapher.vbox.unmap()
+  objectvar GGrapher, EGrapher, JGrapher
+} // Destroy()
+
+proc MainExec() {
+  GetModelTopology()
+  OutLine = "access Soma"
+  execute1(OutLine)
+  MakeGGrapher()
+  MakeEGrapher()
+  MakeJGrapher()
+} // MainExec()
+
+MainExec()

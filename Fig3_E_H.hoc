@@ -1,0 +1,177 @@
+// Conditions of Dominat Effectiveness of Distal Sites of Active Uniform Dendrites with Distributed Tonic Inputs
+// S.M. Korogod, I.B. Kulagina
+// Neirofiziologiya/Neurophysiology, Vol.30, Nos.4/5, pp.376-382, July-October, 1998
+
+objectvar VRGraph, CRGraph, JRGraph, IRGraph
+
+func CalcEq() {
+  if (issection("Dendrite")) {
+    return eq_nmda($1)
+  } else {
+    return erev_PasSA($1)
+  }
+} // CalcEq()
+
+// make graphics for Fig.3. E
+proc MakeVRGraph() {
+  strdef OutLine
+  VRGraph = new Graph(0)
+  VRGraph.xaxis()
+  VRGraph.yaxis()
+  RRGraph = new RangeVarPlot("v")
+  OutLine = "Axon RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  VRGraph.addobject(RRGraph, 1, 1, 1, 1)
+  RRGraph = new RangeVarPlot("CalcEq($1)")
+  OutLine = "Axon RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  VRGraph.addobject(RRGraph, 3, 1, 1, 3)
+  VRGraph.size(-200, 800, -70, 0)
+  VRGraph.view(-200, -72, 1000, 75, 268, 80, 300.0, 215.0)
+  VRGraph.label(0.5, 1, "E", 2, 1, 0, 1, 1)
+  VRGraph.label(0.02, 1, "mV", 2, 1, 0, 1, 1)
+  VRGraph.label(0.9, 0.21, "um", 2, 1, 0, 1, 1)
+  VRGraph.label(0.9, 0.95, "Eq", 2, 1, 0, 1, 3)
+  VRGraph.label(0.9, 0.85, "E", 2, 1, 0, 1, 1)
+  VRGraph.yaxis(3)
+  VRGraph.xaxis(-200, 800, -70, 10, 0, 0, 1)
+  VRGraph.yaxis(-70, 0, -200, 7, 0, 0, 1)
+  flush_list.append(VRGraph)
+  VRGraph.save_name("flush_list.")
+  objectvar RRGraph
+} // MakeVRGraph()
+
+func CalcGnmda() { // mS/cm2
+  return gnmda_nmda($1) * 1000
+} // CalcGs()
+
+func CalcGpd() { // mS/cm2
+  return g_nmda($1) * 1000
+} // CalcGpd()
+
+func CalcGm() { // mS/cm2
+  return (g1_nmda($1) * 1000)
+} // CalcGm()
+
+// make graphics for Fig.3. F
+proc MakeCRGraph() {
+  strdef OutLine
+  CRGraph = new Graph(0)
+  CRGraph.xaxis()
+  CRGraph.yaxis()
+  RRGraph = new RangeVarPlot("CalcGnmda($1)")
+  OutLine = "Dendrite RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  CRGraph.addobject(RRGraph, 2, 1, 1, 2)
+  RRGraph = new RangeVarPlot("CalcGpd($1)")
+  OutLine = "Dendrite RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  CRGraph.addobject(RRGraph, 1, 1, 1, 1)
+  RRGraph = new RangeVarPlot("CalcGm($1)")
+  OutLine = "Dendrite RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  CRGraph.addobject(RRGraph, 3, 1, 1, 3)
+  CRGraph.size(-200, 800, 0, 5)
+  CRGraph.view(-220, -0.1, 1020, 5.1, 683, 80, 300.0, 215.0)
+  CRGraph.label(0.5, 1, "F", 2, 1, 0, 1, 1)
+  CRGraph.label(0.05, 1, "mS/cm2", 2, 1, 0, 1, 1)
+  CRGraph.label(0.9, 0.2, "um", 2, 1, 0, 1, 1)
+  CRGraph.label(0.85, 0.95, "Gm", 2, 1, 0, 1, 3)
+  CRGraph.label(0.85, 0.85, "Gp,d", 2, 1, 0, 1, 1)
+  CRGraph.label(0.85, 0.75, "Gnmda", 2, 1, 0, 1, 2)
+  CRGraph.yaxis(3)
+  CRGraph.xaxis(-200, 800, 0, 10, 0, 0, 1)
+  CRGraph.yaxis(0, 5, -200, 5, 0, 0, 1)
+  flush_list.append(CRGraph)
+  CRGraph.save_name("flush_list.")
+  objectvar RRGraph
+} // MakeCRGraph()
+
+func CalcJm() { local Jm // uA/cm2
+  if (issection("Dendrite")) {
+    Jm = (g1_nmda($1) * (v($1) - eq_nmda($1))) * 1000
+  } else {
+    Jm = (g_PasSA($1) * (v($1) - erev_PasSA($1))) * 1000
+  }
+  return Jm
+} // CalcJm()
+
+// make graphics for Fig.3. G
+proc MakeJRGraph() {
+  strdef OutLine
+  JRGraph = new Graph(0)
+  JRGraph.xaxis()
+  JRGraph.yaxis()
+  RRGraph = new RangeVarPlot("CalcJm($1)")
+  OutLine = "Axon RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  JRGraph.addobject(RRGraph, 1, 1, 1, 1)
+  JRGraph.size(-200, 800, -40, 40)
+  JRGraph.view(-210, -45, 1010, 85, 268, 432, 300.0, 215.0)
+  JRGraph.label(0.5, 1, "G", 2, 1, 0, 1, 1)
+  JRGraph.label(0.05, 1, "uA/cm2", 2, 1, 0, 1, 1)
+  JRGraph.label(0.9, 0.22, "um", 2, 1, 0, 1, 1)
+  JRGraph.yaxis(3)
+  JRGraph.xaxis(-200, 800, -40, 10, 0, 0, 1)
+  JRGraph.xaxis(-200, 800, 0, 0, 0, 0, 0)
+  JRGraph.yaxis(-40, 40, -200, 8, 0, 0, 1)
+  flush_list.append(JRGraph)
+  JRGraph.save_name("flush_list.")
+  objectvar RRGraph
+} // MakeJRGraph()
+
+func CalcI() { local Jm, Im // 0.01*pA/um
+  if (issection("Dendrite")) {
+    Jm = (g1_nmda($1) * (v($1) - eq_nmda($1))) * 1000
+  } else {
+    Jm = (g_PasSA($1) * (v($1) - erev_PasSA($1))) * 1000
+  }
+  Im = -(PI * diam($1) * Jm)
+  return Im
+} // CalcI()
+
+// make graphics for Fig.3. H
+proc MakeIRGraph() {
+  strdef OutLine
+  IRGraph = new Graph(0)
+  IRGraph.xaxis()
+  IRGraph.yaxis()
+  RRGraph = new RangeVarPlot("CalcI($1)")
+  OutLine = "Axon RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  IRGraph.addobject(RRGraph, 1, 1, 1, 1)
+  IRGraph.size(-200, 800, -500, 500)
+  IRGraph.view(-220, -520, 1020, 1020, 683, 432, 300.0, 215.0)
+  IRGraph.label(0.5, 1, "H", 2, 1, 0, 1, 1)
+  IRGraph.label(0.05, 1, "0.01 pA/um", 2, 1, 0, 1, 1)
+  IRGraph.label(0.9, 0.2, "um", 2, 1, 0, 1, 1)
+  IRGraph.yaxis(3)
+  IRGraph.xaxis(-200, 800, -500, 10, 0, 0, 1)
+  IRGraph.xaxis(-200, 800, 0, 0, 0, 0, 0)
+  IRGraph.yaxis(-500, 500, -200, 10, 0, 0, 1)
+  flush_list.append(IRGraph)
+  IRGraph.save_name("flush_list.")
+  objectvar RRGraph
+} // MakeIRGraph()
+
+proc Destroy() {
+  VRGraph.unmap()
+  CRGraph.unmap()
+  JRGraph.unmap()
+  IRGraph.unmap()
+} // Destroy()
+
+proc MainExec() {
+  GetModelTopology()
+  OutLine = "access Soma"
+  execute1(OutLine)
+  OutLine = "Dendrite.gnmdabar_nmda = 0.0061"
+  execute1(OutLine)
+  tstop = 400
+  MakeVRGraph()
+  MakeCRGraph()
+  MakeJRGraph()
+  MakeIRGraph()
+} // MainExec()
+
+MainExec()

@@ -1,0 +1,45 @@
+// Conditions of Dominat Effectiveness of Distal Sites of Active Uniform Dendrites with Distributed Tonic Inputs
+// S.M. Korogod, I.B. Kulagina
+// Neirofiziologiya/Neurophysiology, Vol.30, Nos.4/5, pp.376-382, July-October, 1998
+
+objectvar VRGraph
+
+// make graphics for Fig.2. B
+proc MakeVRGraph() {
+  strdef OutLine
+  VRGraph = new Graph(0)
+  VRGraph.xaxis()
+  VRGraph.yaxis()
+  RRGraph = new RangeVarPlot("v")
+  OutLine = "Axon RRGraph.begin(0) Dendrite RRGraph.end(1)"
+  execute1(OutLine)
+  VRGraph.addobject(RRGraph, 1, 1, 1, 1)
+  VRGraph.size(-200, 800, -70, 0)
+  VRGraph.view(-200, -75, 1000, 75, 350, 300, 300.0, 250)
+  VRGraph.label(0.5, 1, "B", 2, 1, 0, 1, 1)
+  VRGraph.label(0.05, 1, "mV", 2, 1, 0, 1, 1)
+  VRGraph.label(0.9, 0.21, "um", 2, 1, 0, 1, 1)
+  VRGraph.label(0.9, 0.85, "E", 2, 1, 0, 1, 1)
+  VRGraph.yaxis(3)
+  VRGraph.xaxis(-200, 800, -70, 10, 0, 0, 1)
+  VRGraph.yaxis(-70, 0, -200, 7, 0, 0, 1)
+  flush_list.append(VRGraph)
+  VRGraph.save_name("flush_list.")
+  objectvar RRGraph
+} // MakeVRGraph()
+
+proc Destroy() {
+  VRGraph.unmap()
+} // Destroy()
+
+proc MainExec() {
+  GetModelTopology()
+  OutLine = "access Soma"
+  execute1(OutLine)
+  OutLine = "Dendrite.gnmdabar_nmda = 0.006"
+  execute1(OutLine)
+  tstop = 200
+  MakeVRGraph()
+} // MainExec()
+
+MainExec()

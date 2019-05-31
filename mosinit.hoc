@@ -1,0 +1,115 @@
+strdef ArticleLabel1, ArticleLabel2, ArticleLabel3, ArticleLabel4, ArticleLabel5
+ArticleLabel1 = "Conditions of Dominat Effectiveness of Distal Sites of Active Uniform Dendrites"
+ArticleLabel2 = "with Distributed Tonic Inputs"
+ArticleLabel3 = "Sergey M. Korogod and Irina B. Kulagina"
+ArticleLabel4 = "Neurophysiology, Vol.30, Nos.4/5, pp.376-382, July-October, 1998"
+ArticleLabel5 = "Kluwer Academic/ Plenum Publishers English version: Neurophysiology 30(4/5):310-315, 1999"
+objref tempobj
+
+{
+  load_file("stdgui.hoc")
+  load_file("electrod.hoc")
+  load_file("showmech.hoc")
+  load_file("pointman.hoc")
+  load_file("grapher.hoc")
+}
+
+proc MainPanel() {
+   xpanel("Article Results")
+   xvarlabel(ArticleLabel1)
+   xvarlabel(ArticleLabel2)
+   xvarlabel(ArticleLabel3)
+   xvarlabel(ArticleLabel4)
+   xvarlabel(ArticleLabel5)
+   xlabel("")
+   xbutton("Fig.1. A-C", "Main(1)")
+   xbutton("Fig.2. A", "Main(2)")
+   xbutton("Fig.2. B", "Main(3)")
+   xbutton("Fig.3. A-D", "Main(4)")
+   xbutton("Fig.3. E-H", "Main(5)")
+   xlabel("")
+   xpanel(410, 0)
+} // MainPanel()
+
+objectvar RRGraph
+
+// creation of the model
+proc GetModelTopology() {
+  strdef OutLine
+  OutLine = "create Soma"
+  execute1(OutLine)
+  OutLine = "access Soma"
+  execute1(OutLine)
+  OutLine = "Soma { nseg=2 L=20 diam=22.5 insert PasSA }"
+  execute1(OutLine)
+  OutLine = "create Axon"
+  execute1(OutLine)
+  OutLine = "Axon { nseg=20 L=200 diam=3 insert PasSA }  "
+  execute1(OutLine)
+  OutLine = "create Dendrite"
+  execute1(OutLine)
+  OutLine = "Dendrite { nseg=78 L=780 diam=5 insert nmda }"
+  execute1(OutLine)
+  OutLine = "connect Axon(1),Soma(0)"
+  execute1(OutLine)
+  OutLine = "connect Dendrite(0),Soma(1)"
+  execute1(OutLine)
+  define_shape()
+} // GetModelTopology()
+
+proc Destroy(){}
+
+proc CommonDestroy() { local i
+   objectvar graphList[n_graph_lists], graphItem, flush_list, fast_flush_list
+   for i=0,n_graph_lists-1 graphList[i] = new List(1)
+   flush_list = new List(1)
+   fast_flush_list = new List(1)
+
+   tempobj = new List("Inserter")
+   while (tempobj.count()) {
+      tempobj.object(0).v1.unmap()
+   }
+   tempobj = new List("Electrode")
+   while (tempobj.count()) {
+      tempobj.object(0).v1.unmap()
+   }
+   tempobj = new List("PointProcessManager")
+   while (tempobj.count()) {
+      tempobj.object(0).v1.unmap()
+   }
+   tempobj = new List("ShowMechanism")
+   while (tempobj.count()) {
+      tempobj.object(0).v1.unmap()
+   }
+} // CommonDestroy()
+
+proc Main() {
+
+  Destroy()
+  CommonDestroy()
+
+  objectvar save_window_[1], rvp_[1], scene_vector_[1], ocbox_[1]
+  objectvar ocbox_list_[1], scene_list_[1], scene_[1]
+
+  doEvents()
+
+  forall delete_section()
+  v_init = -65
+  stdinit()
+  if ($1 == 1) {
+    xopen("Fig1_A_C.hoc")
+  } else if ($1 == 2) {
+    xopen("Fig2_A.hoc")
+  } else if ($1 == 3) {
+    xopen("Fig2_B.hoc")
+  } else if ($1 == 4) {
+    xopen("Fig3_A_D.hoc")
+  } else if ($1 == 5) {
+    xopen("Fig3_E_H.hoc")
+  }
+  forall Ra=100
+  finitialize()
+} // Main()
+
+nrncontrolmenu()
+MainPanel()
