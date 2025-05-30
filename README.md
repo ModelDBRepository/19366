@@ -33,11 +33,11 @@ An unusual effect was observed in the downstate: more depolarized distal sites w
 - PasSA.mod: passive membrane current of the soma and axon
 - Nmda.mod: synaptic NMDA type channel mechanism
 
-For further details see the above mentioned papers or contact the authors at:
-Laboratory of Biophysics and Bioelectronics,
-Dniepropetrovsk National University,
-49050 Dniepropetrovsk, Ukraine
-Phone/FAX: +38056 776 91 24
+For further details see the above mentioned papers or contact the authors at:  
+Laboratory of Biophysics and Bioelectronics,  
+Dniepropetrovsk National University,  
+49050 Dniepropetrovsk, Ukraine  
+Phone/FAX: +38056 776 91 24  
 E-mails: korogod@ff.dsu.dp.ua;  kulagina@ff.dsu.dp.ua;  valery@ff.dsu.dp.ua
 
 ---
